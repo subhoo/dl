@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+class HebbianNetwork:
+    def __init__(self, input_size):
+        self.weights=np.zeros((input_size, input_size))
+        
+    def train (self, input_patterns):
+        for pattern in input_patterns:
+            self.weights += np.outer(pattern, pattern)
+            
+    def classify(self, input_patterns):
+        outputs= np.dot(input_patterns, self.weights)
+        return np.sign(outputs)
+    
+def plot_patterns(input_patterns, title):
+        for pattern in input_patterns:
+            plt.scatter(pattern[0], pattern[1], color='b')
+            
+        plt.title(title)
+        plt.xlabel('feature 1')
+        plt.ylabel('feature 2')
+        plt.axhline(0, color='black', linewidth=0.5)
+        plt.axvline(0, color='black', linewidth=0.5)
+        plt.grid(color='gray', linestyle='--', linewidth=0.5)
+        plt.show()
+                   
+            
+​
+def main():
+    input_size=2
+    heb_net=HebbianNetwork(input_size)
+    pattern1=np.array([1,1])
+    pattern2=np.array([1,-1])
+    pattern3=np.array([-1,1])
+    pattern4=np.array([-1,-1])
+    input_pattern=[pattern1, pattern2, pattern3, pattern4]
+    heb_net.train(input_pattern)
+    test_pattern1=np.array([0.5,0.5])
+    test_pattern2=np.array([0.5,-0.5])
+    test_pattern3=np.array([-0.5,0.5])
+    test_pattern4=np.array([-0.5,-0.5])
+    res1=heb_net.classify(test_pattern1)
+    res2=heb_net.classify(test_pattern2)
+    res3=heb_net.classify(test_pattern3)
+    res4=heb_net.classify(test_pattern4)
+    plot_patterns(input_pattern, "input_pattern")
+    plot_patterns([test_pattern1, test_pattern2, test_pattern3, test_pattern4], "test_pattern")
+    
+    
+if __name__ == "__main__":
+    main()
